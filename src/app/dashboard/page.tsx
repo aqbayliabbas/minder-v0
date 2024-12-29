@@ -70,7 +70,11 @@ const DashboardContent = () => {
             </div>
             <div className="flex items-center gap-2 md:gap-4">
               <button
+<<<<<<< HEAD
                 onClick={() => setLanguage('en')}
+=======
+                onClick={() => setLanguage(language === 'en' ? 'fr' : 'en')}
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
                 className="px-2 md:px-3 py-1 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
               >
                 {language === 'en' ? 'En' : 'Fr'}

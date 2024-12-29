@@ -164,7 +164,11 @@ export default function Home() {
             onClick={() => setIsModalOpen(true)}
             className="px-8 py-4 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors"
           >
+<<<<<<< HEAD
             {t.hero.cta}
+=======
+            Get early access To Minder
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
           </motion.button>
 
           {/* User Reviews Section */}
@@ -615,15 +619,26 @@ export default function Home() {
             className="bg-white dark:bg-zinc-800 rounded-lg p-6 max-w-md w-full"
           >
             <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 mb-4">
+<<<<<<< HEAD
               {t.modal.earlyAccess.title}
             </h2>
             <p className="text-zinc-700 dark:text-zinc-300 mb-6">
               {t.modal.earlyAccess.subtitle}
+=======
+              Get Early Access
+            </h2>
+            <p className="text-zinc-700 dark:text-zinc-300 mb-6">
+              Sign up now to be among the first to experience Minder when we launch.
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
             </p>
             <form onSubmit={handlePreSignup} className="space-y-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+<<<<<<< HEAD
                   {t.modal.earlyAccess.email}
+=======
+                  Email
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
                 </label>
                 <input
                   type="email"
@@ -632,12 +647,20 @@ export default function Home() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="w-full px-3 py-2 rounded-md border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-zinc-500"
+<<<<<<< HEAD
                   placeholder={t.modal.earlyAccess.emailPlaceholder}
+=======
+                  placeholder="your@email.com"
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
                 />
               </div>
               <div>
                 <label htmlFor="phone" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+<<<<<<< HEAD
                   {t.modal.earlyAccess.phone}
+=======
+                  Phone Number (optional)
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
                 </label>
                 <input
                   type="tel"
@@ -645,7 +668,11 @@ export default function Home() {
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   className="w-full px-3 py-2 rounded-md border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-zinc-500"
+<<<<<<< HEAD
                   placeholder={t.modal.earlyAccess.phonePlaceholder}
+=======
+                  placeholder="+1234567890"
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
                 />
               </div>
               <div className="flex gap-3">
@@ -654,14 +681,22 @@ export default function Home() {
                   onClick={() => setIsModalOpen(false)}
                   className="flex-1 px-4 py-2 rounded-md border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors"
                 >
+<<<<<<< HEAD
                   {t.modal.earlyAccess.cancel}
+=======
+                  Cancel
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
                 </button>
                 <button
                   type="submit"
                   disabled={isLoading}
                   className="flex-1 px-4 py-2 bg-zinc-900 dark:bg-zinc-50 text-zinc-50 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
+<<<<<<< HEAD
                   {isLoading ? t.modal.earlyAccess.submitting : t.modal.earlyAccess.submit}
+=======
+                  {isLoading ? 'Submitting...' : 'Submit'}
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
                 </button>
               </div>
               {message.type === 'success' && (
@@ -784,8 +819,13 @@ export default function Home() {
               >
                 <span className="sr-only">X (Twitter)</span>
                 <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+<<<<<<< HEAD
                   <path d="M18.244 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 17.52h1.833L7.084 4.126H5.117z" />
               </svg>
+=======
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
               </a>
             </div>
             <div className="text-sm text-zinc-500 dark:text-zinc-400">

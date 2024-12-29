@@ -3,10 +3,18 @@
 import { useTheme } from '@/contexts/ThemeContext'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+<<<<<<< HEAD
+=======
+import LanguageSwitcher from './LanguageSwitcher'
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
 import { useState } from 'react'
 
 export default function Navigation() {
   const { theme, toggleTheme } = useTheme()
+<<<<<<< HEAD
+=======
+  const { t } = useLanguage()
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -49,6 +57,10 @@ export default function Navigation() {
 
           {/* Desktop navigation */}
           <div className="hidden md:flex items-center gap-4">
+<<<<<<< HEAD
+=======
+            <LanguageSwitcher />
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -60,21 +72,33 @@ export default function Navigation() {
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
                   </svg>
+<<<<<<< HEAD
                   <span className="hidden sm:inline">Light</span>
+=======
+                  <span className="hidden sm:inline">{t.navigation.theme.light}</span>
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
                   </svg>
+<<<<<<< HEAD
                   <span className="hidden sm:inline">Dark</span>
+=======
+                  <span className="hidden sm:inline">{t.navigation.theme.dark}</span>
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
                 </span>
               )}
             </motion.button>
 
             <div className="flex items-center gap-2">
               <motion.a
+<<<<<<< HEAD
                 whileHover={{ scale: 1.05 }}
+=======
+                whileHover={{ scale: 1 }}
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
                 whileTap={{ scale: 1 }}
                 className="pointer-events-none opacity-50 px-4 py-2 rounded-md border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-50 text-sm font-medium hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
               >
@@ -82,7 +106,11 @@ export default function Navigation() {
               </motion.a>
 
               <motion.a
+<<<<<<< HEAD
                 whileHover={{ scale: 1.05 }}
+=======
+                whileHover={{ scale: 1 }}
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
                 whileTap={{ scale: 1 }}
                 className="pointer-events-none opacity-50 px-4 py-2 rounded-md bg-zinc-900 dark:bg-zinc-50 text-zinc-50 dark:text-zinc-900 text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors"
               >
@@ -101,6 +129,10 @@ export default function Navigation() {
         >
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <div className="flex flex-col gap-4 items-center">
+<<<<<<< HEAD
+=======
+              <LanguageSwitcher />
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -112,14 +144,22 @@ export default function Navigation() {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
                     </svg>
+<<<<<<< HEAD
                     Light
+=======
+                    {t.navigation.theme.light}
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
                   </span>
                 ) : (
                   <span className="flex items-center justify-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
                     </svg>
+<<<<<<< HEAD
                     Dark
+=======
+                    {t.navigation.theme.dark}
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
                   </span>
                 )}
               </motion.button>
@@ -130,7 +170,11 @@ export default function Navigation() {
                   whileTap={{ scale: 1 }}
                   className="pointer-events-none opacity-50 w-full px-4 py-2 rounded-md border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-50 text-sm font-medium hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors text-center"
                 >
+<<<<<<< HEAD
                   Sign In
+=======
+                  {language === 'fr' ? 'Connexion' : 'Sign In'}
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
                 </motion.a>
 
                 <motion.a
@@ -138,7 +182,11 @@ export default function Navigation() {
                   whileTap={{ scale: 1 }}
                   className="pointer-events-none opacity-50 w-full px-4 py-2 rounded-md bg-zinc-900 dark:bg-zinc-50 text-zinc-50 dark:text-zinc-900 text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors text-center"
                 >
+<<<<<<< HEAD
                   Sign Up
+=======
+                  {language === 'fr' ? 'Inscription' : 'Sign Up'}
+>>>>>>> 01df3e99802fd6133bd5b5ed61615504511c8178
                 </motion.a>
               </div>
             </div>
