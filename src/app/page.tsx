@@ -6,6 +6,8 @@ import Navigation from '@/components/Navigation'
 import Image from 'next/image'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { translations } from '@/translations'
+import { useState } from 'react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 // Animation variants
 const fadeInUp = {
@@ -60,6 +62,42 @@ export default function Home() {
     '/assets/images/avatar05.jpg'
   ]
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState({ type: '', content: '' });
+  const supabase = createClientComponentClient();
+
+  const handlePreSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setMessage({ type: '', content: '' });
+
+    try {
+      const { error } = await supabase
+        .from('presignup')
+        .insert([{ email, phone_number: phoneNumber }]);
+
+      if (error) throw error;
+
+      setIsModalOpen(false);
+      setEmail('');
+      setPhoneNumber('');
+      setIsSuccessModalOpen(true); // Show success modal
+      setTimeout(() => setIsSuccessModalOpen(false), 5000); // Hide after 5 seconds
+    } catch (error: any) {
+      if (error.code === '23505') {
+        setMessage({ type: 'error', content: 'This email is already registered for early access.' });
+      } else {
+        setMessage({ type: 'error', content: 'Something went wrong. Please try again.' });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen pt-20 bg-white dark:bg-zinc-900">
       <header>
@@ -93,13 +131,13 @@ export default function Home() {
           variants={fadeInUp}
           className="flex flex-col items-center gap-6"
         >
-          <motion.a 
+          <motion.button 
             variants={fadeInUp}
-            href="#"
+            onClick={() => setIsModalOpen(true)}
             className="px-8 py-4 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors"
           >
-            {t.hero.cta}
-          </motion.a>
+            Get early access To Minder
+          </motion.button>
 
           {/* User Reviews Section */}
           <motion.div 
@@ -518,6 +556,158 @@ export default function Home() {
           </div>
         </div>
       </motion.section>
+
+      {/* Pre-signup Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="bg-white dark:bg-zinc-800 rounded-lg p-6 max-w-md w-full"
+          >
+            <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 mb-4">
+              Get Early Access
+            </h2>
+            <p className="text-zinc-700 dark:text-zinc-300 mb-6">
+              Sign up now to be among the first to experience Minder when we launch.
+            </p>
+            <form onSubmit={handlePreSignup} className="space-y-4">
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full px-3 py-2 rounded-md border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-zinc-500"
+                  placeholder="your@email.com"
+                />
+              </div>
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+                  Phone Number (optional)
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  className="w-full px-3 py-2 rounded-md border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-zinc-500"
+                  placeholder="+1234567890"
+                />
+              </div>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="flex-1 px-4 py-2 rounded-md border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="flex-1 px-4 py-2 rounded-md bg-zinc-900 dark:bg-zinc-50 text-zinc-50 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? 'Submitting...' : 'Submit'}
+                </button>
+              </div>
+              {message.type === 'success' && (
+                <p className="text-sm text-green-600 dark:text-green-400 mt-4">
+                  {message.content}
+                </p>
+              )}
+              {message.type === 'error' && (
+                <p className="text-sm text-red-600 dark:text-red-400 mt-4">
+                  {message.content}
+                </p>
+              )}
+            </form>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Success Modal */}
+      {isSuccessModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <motion.div
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ 
+              scale: 1, 
+              opacity: 1,
+              transition: {
+                type: "spring",
+                stiffness: 300,
+                damping: 20
+              }
+            }}
+            exit={{ scale: 0.5, opacity: 0 }}
+            className="bg-white dark:bg-zinc-800 rounded-lg p-8 max-w-md w-full relative overflow-hidden"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ 
+                scale: [0, 1.2, 1],
+                transition: { 
+                  delay: 0.2,
+                  times: [0, 0.6, 1],
+                  duration: 0.8
+                }
+              }}
+              className="w-20 h-20 mx-auto mb-6"
+            >
+              <svg
+                className="w-full h-full text-green-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <motion.path
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </motion.div>
+            
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.8 }}
+              className="text-center"
+            >
+              <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 mb-4">
+                Welcome to Minder! 🎉
+              </h2>
+              <p className="text-zinc-600 dark:text-zinc-300 mb-6">
+                Thank you for joining our waitlist. We'll notify you as soon as we launch!
+              </p>
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 1 }}
+                className="flex justify-center"
+              >
+                <button
+                  onClick={() => setIsSuccessModalOpen(false)}
+                  className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+                >
+                  Got it!
+                </button>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="bg-gray-50 dark:bg-zinc-900 border-t border-gray-100 dark:border-zinc-800">
