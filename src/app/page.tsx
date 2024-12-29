@@ -68,6 +68,9 @@ export default function Home() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', content: '' });
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [isNewsletterLoading, setIsNewsletterLoading] = useState(false);
+  const [newsletterMessage, setNewsletterMessage] = useState({ type: '', content: '' });
   const supabase = createClientComponentClient();
 
   const handlePreSignup = async (e: React.FormEvent) => {
@@ -95,6 +98,31 @@ export default function Home() {
       }
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsNewsletterLoading(true);
+    setNewsletterMessage({ type: '', content: '' });
+
+    try {
+      const { error } = await supabase
+        .from('newsletter')
+        .insert([{ email: newsletterEmail }]);
+
+      if (error) throw error;
+
+      setNewsletterMessage({ type: 'success', content: 'Thank you for subscribing!' });
+      setNewsletterEmail('');
+    } catch (error: any) {
+      if (error.code === '23505') {
+        setNewsletterMessage({ type: 'error', content: 'This email is already subscribed.' });
+      } else {
+        setNewsletterMessage({ type: 'error', content: 'Something went wrong. Please try again.' });
+      }
+    } finally {
+      setIsNewsletterLoading(false);
     }
   };
 
@@ -535,20 +563,28 @@ export default function Home() {
               <p className="text-zinc-300 dark:text-zinc-600 mb-8">
                 Get the latest updates about new features and tips to make the most of Minder.
               </p>
-              <form className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
+              <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
                 <input
                   type="email"
                   placeholder="Enter your email"
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
                   className="flex-1 px-4 py-3 rounded-lg bg-zinc-800/50 dark:bg-white border border-zinc-700 dark:border-zinc-200 text-zinc-100 dark:text-zinc-900 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
                 <button
                   type="submit"
-                  className="px-6 py-3 bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 rounded-lg font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                  disabled={isNewsletterLoading}
+                  className="px-6 py-3 bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 rounded-lg font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors disabled:opacity-50"
                 >
-                  Subscribe
+                  {isNewsletterLoading ? 'Subscribing...' : 'Subscribe'}
                 </button>
               </form>
+              {newsletterMessage.type && (
+                <p className={`text-sm mt-4 ${newsletterMessage.type === 'success' ? 'text-green-400 dark:text-green-600' : 'text-red-400 dark:text-red-600'}`}>
+                  {newsletterMessage.content}
+                </p>
+              )}
               <p className="text-sm text-zinc-400 dark:text-zinc-500 mt-4">
                 We respect your privacy. Unsubscribe at any time.
               </p>
@@ -611,7 +647,7 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="flex-1 px-4 py-2 rounded-md bg-zinc-900 dark:bg-zinc-50 text-zinc-50 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-4 py-2 bg-zinc-900 dark:bg-zinc-50 text-zinc-50 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isLoading ? 'Submitting...' : 'Submit'}
                 </button>
@@ -711,83 +747,37 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-gray-50 dark:bg-zinc-900 border-t border-gray-100 dark:border-zinc-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-8">
-            <div className="col-span-2 lg:col-span-2">
-              <div className="text-2xl font-bold mb-4">Minder</div>
-              <p className="text-zinc-600 dark:text-zinc-300 mb-4 max-w-sm">
-                Making document understanding faster and more efficient with AI.
-              </p>
-              <div className="flex gap-4">
-                {/* Social Media Icons */}
-                {['twitter', 'linkedin', 'github'].map((social) => (
-                  <a
-                    key={social}
-                    href={`https://${social}.com`}
-                    className="text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <span className="sr-only">{social}</span>
-                    <div className="w-6 h-6 bg-current rounded shadow-sm hover:shadow-md transition-all" />
-                  </a>
-                ))}
-              </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="flex flex-col items-center">
+            <div className="text-2xl font-bold mb-6 text-zinc-900 dark:text-zinc-50">Minder</div>
+            <div className="flex gap-6 mb-6">
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors"
+              >
+                <span className="sr-only">Instagram</span>
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    fillRule="evenodd"
+                    d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+              </a>
+              <a
+                href="https://x.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors"
+              >
+                <span className="sr-only">X (Twitter)</span>
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+              </a>
             </div>
-
-            <div>
-              <h3 className="font-semibold mb-4">Product</h3>
-              <ul className="space-y-3">
-                {['Features', 'Pricing', 'Use Cases', 'Updates'].map((item) => (
-                  <li key={item}>
-                    <a href="#" className="text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors">
-                      {item}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-4">Company</h3>
-              <ul className="space-y-3">
-                {['About', 'Blog', 'Careers', 'Contact'].map((item) => (
-                  <li key={item}>
-                    <a href="#" className="text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors">
-                      {item}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-4">Resources</h3>
-              <ul className="space-y-3">
-                {['Documentation', 'Help Center', 'API', 'Status'].map((item) => (
-                  <li key={item}>
-                    <a href="#" className="text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors">
-                      {item}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          <div className="pt-8 border-t border-gray-200">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-              <p className="text-zinc-600 dark:text-zinc-300 text-sm">
-                &copy; {new Date().getFullYear()} Minder. All rights reserved.
-              </p>
-              <div className="flex gap-6">
-                <a href="#" className="text-sm text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors">
-                  Privacy Policy
-                </a>
-                <a href="#" className="text-sm text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors">
-                  Terms of Service
-                </a>
-              </div>
+            <div className="text-sm text-zinc-500 dark:text-zinc-400">
+              &copy; 2024 Minder. All rights reserved.
             </div>
           </div>
         </div>
