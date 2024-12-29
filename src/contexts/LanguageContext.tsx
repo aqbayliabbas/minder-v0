@@ -20,28 +20,23 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [t, setT] = useState<TranslationType>(translations.en);
 
   useEffect(() => {
-    // Get saved language preference from localStorage
-    const savedLanguage = localStorage.getItem('language') as Language;
-    if (savedLanguage) {
-      setLanguage(savedLanguage);
-      setT(translations[savedLanguage]);
-    } else {
-      // Get browser language
-      const browserLang = navigator.language.split('-')[0] as Language;
-      const defaultLang = browserLang === 'fr' ? 'fr' : 'en';
-      setLanguage(defaultLang);
-      setT(translations[defaultLang]);
-    }
+    // Always use English
+    setLanguage('en');
+    setT(translations.en);
+    localStorage.setItem('language', 'en');
   }, []);
 
   const handleSetLanguage = (lang: Language) => {
-    setLanguage(lang);
-    setT(translations[lang]);
-    localStorage.setItem('language', lang);
+    // Only allow English
+    if (lang === 'en') {
+      setLanguage('en');
+      setT(translations.en);
+      localStorage.setItem('language', 'en');
+    }
   };
 
   const toggleLanguage = () => {
-    setLanguage(prev => prev === 'en' ? 'fr' : 'en');
+    // Disabled language toggle
   };
 
   return (

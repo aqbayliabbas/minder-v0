@@ -1,267 +1,27 @@
 export const translations = {
-  fr: {
-    navigation: {
-      theme: {
-        light: "",
-        dark: ""
-      },
-      language: {
-        en: "En",
-        fr: "Fr"
-      }
-    },
-    auth: {
-      login: {
-        title: "Connexion",
-        email: "Email",
-        password: "Mot de passe",
-        submit: "Se connecter",
-        forgotPassword: "Mot de passe oublié ?",
-        noAccount: "Pas encore de compte ?",
-        signUp: "S'inscrire",
-        error: "Une erreur s'est produite lors de la connexion",
-        rateLimit: "Trop de tentatives. Veuillez patienter quelques minutes."
-      },
-      signup: {
-        title: "Créer un compte",
-        email: "Email",
-        password: "Mot de passe",
-        confirmPassword: "Confirmer le mot de passe",
-        submit: "S'inscrire",
-        hasAccount: "Déjà un compte ?",
-        login: "Se connecter",
-        error: "Une erreur s'est produite lors de l'inscription"
-      }
-    },
-    dashboard: {
-      logo: "Minder",
-      welcome: "Tableau de bord",
-      upload: "Télécharger",
-      documents: "Documents",
-      settings: "Paramètres",
-      search: "Rechercher",
-      signOut: "Se déconnecter",
-      storage: "Stockage",
-      recentUploads: "Téléchargements récents",
-      noRecentUploads: "Aucun téléchargement récent",
-      uploadDocument: "Télécharger un document",
-      selectedFile: "Fichier sélectionné",
-      cancel: "Annuler",
-      uploading: "Téléchargement en cours",
-      searchDocuments: "Rechercher des documents...",
-      loadingDocuments: "Chargement des documents...",
-      noDocumentsInitial: "Aucun document trouvé",
-      noDocumentsFound: "Aucun document ne correspond à votre recherche",
-      previewDocument: "Aperçu",
-      deleteDocument: "Supprimer",
-      uploadHint: "Glissez-déposez vos fichiers ici ou cliquez pour sélectionner",
-      recentActivity: "Activité Récente"
-    },
-    settings: {
-      language: "Langue",
-      theme: "Thème"
-    },
-    hero: {
-      title: "Comprenez vos documents en quelques secondes",
-      subtitle: "L'Assistant IA qui comprend tous vos documents et vous fait gagner du temps au quotidien.",
-      cta: "Essayer Minder",
-      users: "utilisateurs gagnent du temps chaque jour"
-    },
-    problem: {
-      title: "Arrêtez de perdre des heures à lire manuellement",
-      features: {
-        timeConsuming: {
-          title: "Processus Chronophage",
-          description: "La lecture de longs documents prend des heures de votre temps précieux"
-        },
-        infoOverload: {
-          title: "Surcharge d'Information",
-          description: "Difficulté à extraire et mémoriser les informations clés de plusieurs documents"
-        },
-        manualAnalysis: {
-          title: "Analyse Manuelle",
-          description: "L'analyse et la comparaison manuelles des documents mènent à des insights manqués"
-        }
-      }
-    },
-    features: {
-      title: "La Méthode Intelligente de Gérer les Documents",
-      subtitle: "Notre solution alimentée par l'IA transforme votre façon de travailler avec les documents, rendant l'information instantanément accessible et exploitable.",
-      cards: {
-        analysis: {
-          title: "Analyse Ultra-rapide",
-          description: "Traitez et analysez des documents en quelques secondes au lieu d'heures. Obtenez des insights instantanés de tout type de document."
-        },
-        search: {
-          title: "Recherche Intelligente",
-          description: "Posez des questions en langage naturel et obtenez des réponses précises instantanément de vos documents."
-        },
-        ai: {
-          title: "Compréhension IA",
-          description: "L'IA avancée comprend le contexte et les nuances, fournissant des insights plus profonds que la recherche traditionnelle."
-        },
-        multiFormat: {
-          title: "Support Multi-format",
-          description: "Fonctionne avec les PDFs, documents Word, feuilles de calcul et plus. Pas besoin de convertir les fichiers."
-        },
-        security: {
-          title: "Stockage Sécurisé",
-          description: "La sécurité de niveau entreprise garantit que vos documents sont sûrs et privés en tout temps."
-        },
-        integration: {
-          title: "Intégration Facile",
-          description: "S'intègre parfaitement à votre flux de travail et vos outils favoris."
-        },
-        collaboration: {
-          title: "Collaboration en Temps Réel",
-          description: "Travaillez ensemble sur les documents en temps réel avec votre équipe."
-        }
-      }
-    },
-    faq: {
-      title: "Questions Fréquentes",
-      subtitle: "Tout ce que vous devez savoir sur Minder et son fonctionnement.",
-      questions: [
-        {
-          question: "Comment Minder protège-t-il mes données ?",
-          answer: "Minder utilise un chiffrement de bout en bout et des protocoles de sécurité de niveau entreprise pour garantir que vos documents restent privés et sécurisés."
-        },
-        {
-          question: "Quels types de documents Minder peut-il traiter ?",
-          answer: "Minder prend en charge une large gamme de formats, incluant PDF, Word, Excel, PowerPoint, et plus encore."
-        },
-        {
-          question: "Combien de documents puis-je analyser ?",
-          answer: "Nos forfaits s'adaptent à vos besoins, que vous ayez quelques documents ou des milliers à analyser."
-        }
-      ]
-    },
-    newsletter: {
-      title: "Restez Informé",
-      subtitle: "Recevez les dernières mises à jour sur les nouvelles fonctionnalités et les conseils pour tirer le meilleur parti de Minder.",
-      placeholder: "Entrez votre email",
-      button: "S'abonner",
-      privacy: "Nous respectons votre vie privée. Désabonnez-vous à tout moment."
-    },
-    footer: {
-      description: "Rendre la compréhension des documents plus rapide et plus efficace avec l'IA.",
-      links: {
-        features: "Fonctionnalités",
-        pricing: "Tarifs",
-        useCases: "Cas d'Usage",
-        updates: "Mises à jour",
-        about: "À propos",
-        blog: "Blog",
-        careers: "Carrières",
-        contact: "Contact",
-        docs: "Documentation",
-        help: "Centre d'aide",
-        api: "API",
-        status: "Statut"
-      },
-      legal: {
-        privacy: "Politique de Confidentialité",
-        terms: "Conditions d'Utilisation",
-        rights: "Tous droits réservés"
-      }
-    },
-    nav: {
-      signIn: "Connexion"
-    }
-  },
   en: {
-    navigation: {
-      theme: {
-        light: "",
-        dark: ""
-      },
-      language: {
-        en: "En",
-        fr: "Fr"
-      }
-    },
-    auth: {
-      login: {
-        title: "Login",
-        email: "Email",
-        password: "Password",
-        submit: "Sign in",
-        forgotPassword: "Forgot password?",
-        noAccount: "Don't have an account?",
-        signUp: "Sign up",
-        error: "An error occurred during login",
-        rateLimit: "Too many attempts. Please wait a few minutes."
-      },
-      signup: {
-        title: "Create account",
-        email: "Email",
-        password: "Password",
-        confirmPassword: "Confirm password",
-        submit: "Sign up",
-        hasAccount: "Already have an account?",
-        login: "Login",
-        error: "An error occurred during signup"
-      }
-    },
-    dashboard: {
-      logo: "Minder",
-      welcome: "Dashboard",
-      upload: "Upload",
-      documents: "Documents",
-      settings: "Settings",
-      signOut: "Sign out",
-      storage: "Storage",
-      recentUploads: "Recently Uploaded",
-      noRecentUploads: "No recent uploads",
-      uploadDocument: "Upload Document",
-      selectedFile: "Selected File",
-      cancel: "Cancel",
-      uploading: "Uploading",
-      searchDocuments: "Search documents...",
-      loadingDocuments: "Loading documents...",
-      noDocumentsInitial: "No documents found",
-      noDocumentsFound: "No documents found matching your search",
-      previewDocument: "Preview",
-      deleteDocument: "Delete",
-      search: "Search",
-      uploadHint: "Drag and drop your files here or click to select",
-      recentActivity: "Recent Activity"
-    },
-    settings: {
+    common: {
       language: "Language",
       theme: "Theme"
+    },
+    auth: {
+      signup: {
+        title: "Sign Up"
+      },
+      signin: {
+        title: "Sign In"
+      }
     },
     hero: {
       title: "Understand your documents in seconds",
       subtitle: "The AI Assistant that understands all your documents and saves you time every day.",
-      cta: "Try Minder",
-      users: "users save time every day"
-    },
-    problem: {
-      title: "Stop wasting hours reading manually",
-      features: {
-        timeConsuming: {
-          title: "Time-Consuming Process",
-          description: "Reading through lengthy documents takes hours of your valuable time"
-        },
-        infoOverload: {
-          title: "Information Overload",
-          description: "Difficult to extract and remember key information from multiple documents"
-        },
-        manualAnalysis: {
-          title: "Manual Analysis",
-          description: "Analyzing and comparing documents manually leads to missed insights"
-        }
-      }
+      cta: "Get Early Access To Minder",
+      users: "Minders save time every day"
     },
     features: {
-      title: "The Smart Way to Handle Documents",
-      subtitle: "Our AI-powered solution transforms how you work with documents, making information instantly accessible and actionable.",
+      title: "Features",
+      subtitle: "Powerful tools for better productivity",
       cards: {
-        analysis: {
-          title: "Lightning-Fast Analysis",
-          description: "Process and analyze documents in seconds instead of hours. Get instant insights from any type of document."
-        },
         search: {
           title: "Smart Search",
           description: "Ask questions in natural language and get precise answers instantly from your documents."
@@ -280,12 +40,46 @@ export const translations = {
         },
         integration: {
           title: "Easy Integration",
-          description: "Seamlessly integrates with your workflow and favorite tools."
+          description: "Seamlessly integrates with your existing workflow and favorite tools."
+        },
+        analysis: {
+          title: "Smart Analysis",
+          description: "Advanced AI analysis provides deep insights from your documents instantly."
         },
         collaboration: {
-          title: "Real-time Collaboration",
-          description: "Work together on documents in real-time with your team."
+          title: "Team Collaboration",
+          description: "Work together seamlessly with your team on documents and share insights effortlessly."
         }
+      }
+    },
+    problem: {
+      title: "Common Document Management Challenges",
+      features: {
+        timeConsuming: {
+          title: "Time-Consuming Process",
+          description: "Traditional document review and analysis takes hours of manual work."
+        },
+        infoOverload: {
+          title: "Information Overload",
+          description: "Dealing with large volumes of documents makes it hard to find relevant information."
+        },
+        manualAnalysis: {
+          title: "Manual Analysis",
+          description: "Human analysis is prone to errors and inconsistencies."
+        }
+      }
+    },
+    modal: {
+      earlyAccess: {
+        title: "Get Early Access",
+        subtitle: "Join our waitlist to be among the first to experience Minder",
+        email: "Email",
+        emailPlaceholder: "Enter your email",
+        phone: "Phone Number (Optional)",
+        phonePlaceholder: "Enter your phone number",
+        submit: "Join Waitlist",
+        submitting: "Submitting...",
+        cancel: "Cancel"
       }
     },
     faq: {
@@ -316,27 +110,246 @@ export const translations = {
     footer: {
       description: "Making document understanding faster and more efficient with AI.",
       links: {
-        features: "Features",
-        pricing: "Pricing",
-        useCases: "Use Cases",
-        updates: "Updates",
-        about: "About",
-        blog: "Blog",
-        careers: "Careers",
-        contact: "Contact",
-        docs: "Documentation",
-        help: "Help Center",
-        api: "API",
-        status: "Status"
-      },
-      legal: {
-        privacy: "Privacy Policy",
-        terms: "Terms of Service",
-        rights: "All rights reserved"
+        product: {
+          title: "Product",
+          items: [
+            { text: "Features", href: "#features" },
+            { text: "Pricing", href: "#pricing" },
+            { text: "FAQ", href: "#faq" }
+          ]
+        },
+        company: {
+          title: "Company",
+          items: [
+            { text: "About", href: "#about" },
+            { text: "Blog", href: "#blog" },
+            { text: "Careers", href: "#careers" }
+          ]
+        },
+        legal: {
+          title: "Legal",
+          items: [
+            { text: "Privacy", href: "#privacy" },
+            { text: "Terms", href: "#terms" }
+          ]
+        }
       }
     },
     nav: {
       signIn: "Sign In"
+    },
+    navigation: {
+      theme: {
+        light: "Light",
+        dark: "Dark"
+      },
+      language: {
+        en: "En",
+        fr: "Fr"
+      }
+    },
+    dashboard: {
+      logo: "Minder",
+      welcome: "Dashboard",
+      upload: "Upload",
+      documents: "Documents",
+      settings: "Settings",
+      search: "Search",
+      signOut: "Sign out",
+      storage: "Storage",
+      recentUploads: "Recently Uploaded",
+      noRecentUploads: "No recent uploads",
+      uploadDocument: "Upload Document",
+      selectedFile: "Selected File",
+      cancel: "Cancel",
+      uploading: "Uploading",
+      searchDocuments: "Search documents...",
+      loadingDocuments: "Loading documents...",
+      noDocumentsInitial: "No documents found",
+      noDocumentsFound: "No documents found matching your search",
+      previewDocument: "Preview",
+      deleteDocument: "Delete",
+      uploadHint: "Drag and drop your files here or click to select",
+      recentActivity: "Recent Activity"
+    },
+    settings: {
+      title: "Settings",
+      language: "Language",
+      theme: "Theme"
+    }
+  },
+  fr: {
+    common: {
+      language: "Langue",
+      theme: "Thème"
+    },
+    auth: {
+      signup: {
+        title: "S'inscrire"
+      },
+      signin: {
+        title: "Se connecter"
+      }
+    },
+    hero: {
+      title: "Comprendre vos documents en quelques secondes",
+      subtitle: "L'Assistant IA qui comprend tous vos documents et vous fait gagner du temps au quotidien.",
+      cta: "Essayer Minder",
+      users: "utilisateurs gagnent du temps chaque jour"
+    },
+    features: {
+      title: "Fonctionnalités",
+      subtitle: "Des outils puissants pour une meilleure productivité",
+      cards: {
+        search: {
+          title: "Recherche Intelligente",
+          description: "Posez des questions en langage naturel et obtenez des réponses précises instantanément à partir de vos documents."
+        },
+        ai: {
+          title: "Assistant IA",
+          description: "Interagissez avec un assistant IA qui comprend le contexte de vos documents et vous aide à prendre de meilleures décisions."
+        },
+        multiFormat: {
+          title: "Multi-Format",
+          description: "Gérez tous vos formats de documents au même endroit : PDF, Word, Excel, PowerPoint, et plus encore."
+        },
+        security: {
+          title: "Sécurité",
+          description: "Vos données sont chiffrées et sécurisées. Vous gardez le contrôle total sur vos documents."
+        },
+        integration: {
+          title: "Intégration",
+          description: "Connectez-vous facilement à vos services préférés et importez vos documents en un clic."
+        },
+        analysis: {
+          title: "Analyse Intelligente",
+          description: "L'analyse avancée de l'IA fournit des informations précieuses à partir de vos documents instantanément."
+        },
+        collaboration: {
+          title: "Collaboration d'équipe",
+          description: "Travaillez ensemble de manière transparente avec votre équipe sur des documents et partagez des informations sans effort."
+        }
+      }
+    },
+    problem: {
+      title: "Défis courants de la gestion documentaire",
+      features: {
+        timeConsuming: {
+          title: "Processus chronophage",
+          description: "La révision et l'analyse traditionnelles des documents prennent des heures de travail manuel."
+        },
+        infoOverload: {
+          title: "Surcharge d'informations",
+          description: "La gestion de grands volumes de documents rend difficile la recherche d'informations pertinentes."
+        },
+        manualAnalysis: {
+          title: "Analyse manuelle",
+          description: "L'analyse humaine est sujette à des erreurs et des incohérences."
+        }
+      }
+    },
+    modal: {
+      earlyAccess: {
+        title: "Accès Anticipé",
+        subtitle: "Rejoignez notre liste d'attente pour être parmi les premiers à découvrir Minder",
+        email: "Email",
+        emailPlaceholder: "Entrez votre email",
+        phone: "Numéro de téléphone (Optionnel)",
+        phonePlaceholder: "Entrez votre numéro de téléphone",
+        submit: "Rejoindre la liste",
+        submitting: "En cours...",
+        cancel: "Annuler"
+      }
+    },
+    solution: {
+      title: "Une nouvelle approche de la gestion documentaire",
+      subtitle: "Minder transforme la façon dont vous interagissez avec vos documents",
+      cards: {
+        ai: {
+          title: "Assistant IA",
+          description: "Un assistant qui comprend vos documents et répond à vos questions en temps réel."
+        },
+        search: {
+          title: "Recherche intelligente",
+          description: "Trouvez instantanément les informations dont vous avez besoin dans tous vos documents."
+        },
+        security: {
+          title: "Sécurité renforcée",
+          description: "Vos documents sont chiffrés et protégés selon les normes les plus strictes."
+        }
+      }
+    },
+    faq: {
+      title: "Questions fréquentes",
+      subtitle: "Tout ce que vous devez savoir sur Minder",
+      questions: {
+        q1: {
+          question: "Comment fonctionne Minder ?",
+          answer: "Minder utilise l'intelligence artificielle pour analyser et comprendre vos documents. Vous pouvez poser des questions en langage naturel et obtenir des réponses précises instantanément."
+        },
+        q2: {
+          question: "Quels types de documents sont pris en charge ?",
+          answer: "Minder prend en charge une large gamme de formats : PDF, Word, Excel, PowerPoint, et plus encore. Nous ajoutons régulièrement de nouveaux formats."
+        },
+        q3: {
+          question: "Mes documents sont-ils en sécurité ?",
+          answer: "Oui, la sécurité est notre priorité. Tous les documents sont chiffrés et nous respectons les normes de sécurité les plus strictes."
+        },
+        q4: {
+          question: "Puis-je essayer Minder gratuitement ?",
+          answer: "Oui, vous pouvez essayer Minder gratuitement pendant 14 jours. Aucune carte de crédit n'est requise."
+        }
+      }
+    },
+    newsletter: {
+      title: "Restez informé",
+      subtitle: "Inscrivez-vous à notre newsletter pour recevoir les dernières actualités",
+      placeholder: "Votre email",
+      cta: "S'inscrire",
+      success: "Merci de votre inscription !",
+      error: "Une erreur est survenue. Veuillez réessayer."
+    },
+    nav: {
+      signIn: "Se connecter"
+    },
+    navigation: {
+      theme: {
+        light: "Clair",
+        dark: "Sombre"
+      },
+      language: {
+        en: "En",
+        fr: "Fr"
+      }
+    },
+    dashboard: {
+      logo: "Minder",
+      welcome: "Tableau de bord",
+      upload: "Télécharger",
+      documents: "Documents",
+      settings: "Paramètres",
+      search: "Rechercher",
+      signOut: "Déconnexion",
+      storage: "Stockage",
+      recentUploads: "Téléchargements récents",
+      noRecentUploads: "Aucun téléchargement récent",
+      uploadDocument: "Télécharger un document",
+      selectedFile: "Fichier sélectionné",
+      cancel: "Annuler",
+      uploading: "Téléchargement en cours",
+      searchDocuments: "Rechercher des documents...",
+      loadingDocuments: "Chargement des documents...",
+      noDocumentsInitial: "Aucun document trouvé",
+      noDocumentsFound: "Aucun document ne correspond à votre recherche",
+      previewDocument: "Aperçu",
+      deleteDocument: "Supprimer",
+      uploadHint: "Glissez-déposez vos fichiers ici ou cliquez pour sélectionner",
+      recentActivity: "Activité récente"
+    },
+    settings: {
+      title: "Paramètres",
+      language: "Langue",
+      theme: "Thème"
     }
   }
 }
