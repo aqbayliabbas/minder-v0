@@ -79,19 +79,17 @@ export default function Navigation() {
 
             <div className="flex items-center gap-2">
               <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                href="/auth/login"
-                className="px-4 py-2 rounded-md border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-50 text-sm font-medium hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                whileHover={{ scale: 1 }}
+                whileTap={{ scale: 1 }}
+                className="pointer-events-none opacity-50 px-4 py-2 rounded-md border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-50 text-sm font-medium hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
               >
                 {language === 'fr' ? 'Connexion' : 'Sign In'}
               </motion.a>
 
               <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                href="/auth/signup"
-                className="px-4 py-2 rounded-md bg-zinc-900 dark:bg-zinc-50 text-zinc-50 dark:text-zinc-900 text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors"
+                whileHover={{ scale: 1 }}
+                whileTap={{ scale: 1 }}
+                className="pointer-events-none opacity-50 px-4 py-2 rounded-md bg-zinc-900 dark:bg-zinc-50 text-zinc-50 dark:text-zinc-900 text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors"
               >
                 {language === 'fr' ? 'Inscription' : 'Sign Up'}
               </motion.a>
@@ -134,19 +132,17 @@ export default function Navigation() {
 
               <div className="flex flex-col w-full gap-2">
                 <motion.a
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  href="/auth/login"
-                  className="w-full px-4 py-2 rounded-md border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-50 text-sm font-medium hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors text-center"
+                  whileHover={{ scale: 1 }}
+                  whileTap={{ scale: 1 }}
+                  className="pointer-events-none opacity-50 w-full px-4 py-2 rounded-md border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-50 text-sm font-medium hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors text-center"
                 >
                   {language === 'fr' ? 'Connexion' : 'Sign In'}
                 </motion.a>
 
                 <motion.a
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  href="/auth/signup"
-                  className="w-full px-4 py-2 rounded-md bg-zinc-900 dark:bg-zinc-50 text-zinc-50 dark:text-zinc-900 text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors text-center"
+                  whileHover={{ scale: 1 }}
+                  whileTap={{ scale: 1 }}
+                  className="pointer-events-none opacity-50 w-full px-4 py-2 rounded-md bg-zinc-900 dark:bg-zinc-50 text-zinc-50 dark:text-zinc-900 text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors text-center"
                 >
                   {language === 'fr' ? 'Inscription' : 'Sign Up'}
                 </motion.a>
