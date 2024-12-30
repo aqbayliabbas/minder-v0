@@ -8,6 +8,7 @@ import { useLanguage } from '@/contexts/LanguageContext'
 import { translations } from '@/translations'
 import { useState } from 'react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useEffect } from 'react';
 
 // Animation variants
 const fadeInUp = {
@@ -43,6 +44,8 @@ const cardVariants = {
 export default function Home() {
   const { language } = useLanguage()
   const t = translations[language]
+
+  const [showScrollTop, setShowScrollTop] = useState(false)
 
   const problemRef = useRef(null)
   const solutionRef = useRef(null)
@@ -125,6 +128,22 @@ export default function Home() {
       setIsNewsletterLoading(false);
     }
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
 
   return (
     <main className="min-h-screen pt-20 bg-white">
@@ -283,72 +302,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section
-        ref={solutionRef}
-        className="py-20"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isSolutionInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-zinc-900">
-              {t.features.title}
-            </h2>
-            <p className="text-lg text-zinc-600 max-w-3xl mx-auto">
-              {t.features.subtitle}
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isSolutionInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-white p-6 rounded-lg shadow-sm"
-            >
-              <h3 className="text-xl font-semibold mb-4 text-zinc-900">
-                {t.features.cards.analysis.title}
-              </h3>
-              <p className="text-zinc-600">
-                {t.features.cards.analysis.description}
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isSolutionInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white p-6 rounded-lg shadow-sm"
-            >
-              <h3 className="text-xl font-semibold mb-4 text-zinc-900">
-                {t.features.cards.analysis.title}
-              </h3>
-              <p className="text-zinc-600">
-                {t.features.cards.analysis.description}
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isSolutionInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-white p-6 rounded-lg shadow-sm"
-            >
-              <h3 className="text-xl font-semibold mb-4 text-zinc-900">
-                {t.features.cards.collaboration.title}
-              </h3>
-              <p className="text-zinc-600">
-                {t.features.cards.collaboration.description}
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
       {/* Solution Section */}
       <motion.section 
         ref={solutionRef}
@@ -419,7 +372,7 @@ export default function Home() {
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
                 <svg className="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2z" />
               </svg>
               </div>
               <h3 className="text-xl font-semibold mb-2 text-zinc-900">AI Understanding</h3>
@@ -575,7 +528,7 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={isNewsletterLoading}
-                  className="px-6 py-3 bg-zinc-50 text-zinc-900 rounded-lg font-medium hover:bg-zinc-100 transition-colors disabled:opacity-50"
+                  className="px-6 py-2 bg-zinc-50 text-zinc-900 rounded-lg font-medium hover:bg-zinc-100 transition-colors disabled:opacity-50"
                 >
                   {isNewsletterLoading ? 'Subscribing...' : 'Subscribe'}
                 </button>
@@ -592,6 +545,33 @@ export default function Home() {
           </div>
         </div>
       </motion.section>
+
+      {/* Scroll to Top Button */}
+      <motion.button
+        onClick={scrollToTop}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ 
+          opacity: showScrollTop ? 1 : 0,
+          scale: showScrollTop ? 1 : 0.8,
+          y: showScrollTop ? 0 : 20
+        }}
+        className="fixed bottom-8 right-8 bg-indigo-600 text-white p-3 rounded-full shadow-lg hover:bg-indigo-700 transition-colors z-50"
+        style={{ display: showScrollTop ? 'block' : 'none' }}
+      >
+        <svg 
+          className="w-6 h-6" 
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            strokeWidth={2} 
+            d="M5 10l7-7m0 0l7 7m-7-7v18"
+          />
+        </svg>
+      </motion.button>
 
       {/* Pre-signup Modal */}
       {isModalOpen && (
@@ -750,32 +730,6 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col items-center">
             <div className="text-2xl font-bold mb-6 text-zinc-900">Minder</div>
-            <div className="flex gap-6 mb-6">
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-zinc-600 hover:text-zinc-900 transition-colors"
-              >
-                <span className="sr-only">Instagram</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    fillRule="evenodd"
-                    d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-              </a>
-              <a
-                href="https://x.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-zinc-600 hover:text-zinc-900 transition-colors"
-              >
-                <span className="sr-only">X (Twitter)</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-              </a>
-            </div>
             <div className="text-sm text-zinc-500">
               &copy; 2024 Minder. All rights reserved.
             </div>

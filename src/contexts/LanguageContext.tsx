@@ -26,11 +26,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       setLanguage(savedLanguage);
       setT(translations[savedLanguage]);
     } else {
-      // Get browser language
-      const browserLang = navigator.language.split('-')[0] as Language;
-      const defaultLang = browserLang === 'fr' ? 'fr' : 'en';
-      setLanguage(defaultLang);
-      setT(translations[defaultLang]);
+      // Set English as default language
+      setLanguage('en');
+      setT(translations.en);
     }
   }, []);
 
