@@ -171,38 +171,41 @@ const DocumentsView = () => {
                 key={doc.id}
                 className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700"
               >
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-                  <div className="flex items-start gap-3 min-w-0">
-                    <FileText className="w-5 h-5 mt-1 flex-shrink-0 text-gray-400" />
-                    <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <FileText className="w-5 h-5 flex-shrink-0 text-gray-400" />
+                    <div className="min-w-0">
                       <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">
                         {getFileName(doc.file_path)}
                       </h3>
-                      <div className="flex flex-col sm:flex-row gap-1 sm:gap-4 mt-1 text-xs text-gray-500 dark:text-gray-400">
+                      <div className="flex items-center gap-2 mt-1 text-xs text-gray-500 dark:text-gray-400">
                         <span>{formatFileSize(doc.size)}</span>
-                        <span className="hidden sm:inline">•</span>
+                        <span>•</span>
                         <span>{formatDate(doc.created_at)}</span>
                       </div>
                     </div>
                   </div>
-                  <button
-                    onClick={() => handleDelete(doc.id, doc.file_path)}
-                    className="p-2 text-gray-500 hover:text-red-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ml-auto sm:ml-0"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => handlePreview(doc.file_path, doc.type)}
-                    className="px-3 py-1 text-sm rounded-md bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-                  >
-                    {t.dashboard.previewDocument}
-                  </button>
-                  <button
-                    onClick={() => handleChat(doc.id)}
-                    className="px-3 py-1 text-sm rounded-md bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
-                  >
-                    Chat
-                  </button>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <button
+                      onClick={() => handlePreview(doc.file_path, doc.type)}
+                      className="px-3 py-1.5 text-sm rounded-md bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                    >
+                      {t.dashboard.previewDocument}
+                    </button>
+                    <button
+                      onClick={() => handleChat(doc.id)}
+                      className="px-3 py-1.5 text-sm rounded-md bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-900/50 transition-colors"
+                    >
+                      Chat
+                    </button>
+                    <button
+                      onClick={() => handleDelete(doc.id, doc.file_path)}
+                      className="p-1.5 text-gray-500 hover:text-red-600 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      title="Delete document"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

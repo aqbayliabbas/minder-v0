@@ -113,6 +113,10 @@ const DashboardView = () => {
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      if (file.type !== 'application/pdf') {
+        setError('Only PDF files are allowed');
+        return;
+      }
       setSelectedFile(file);
       setError(null);
     }
@@ -121,6 +125,11 @@ const DashboardView = () => {
   const handleUpload = async () => {
     if (!selectedFile) {
       setError('Please select a file first');
+      return;
+    }
+
+    if (selectedFile.type !== 'application/pdf') {
+      setError('Only PDF files are allowed');
       return;
     }
 
@@ -159,6 +168,13 @@ const DashboardView = () => {
       setIsUploadModalOpen(false);
       setSelectedFile(null);
       router.refresh();
+      
+      // Redirect to Documents view after successful upload
+      window.location.hash = '#documents';
+      const documentsButton = document.querySelector('button[data-tab="documents"]');
+      if (documentsButton) {
+        (documentsButton as HTMLButtonElement).click();
+      }
     } catch (err) {
       console.error('Upload error:', err);
       setError(err instanceof Error ? err.message : 'Failed to upload file');
@@ -235,25 +251,30 @@ const DashboardView = () => {
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{t.dashboard.uploadDocument}</h2>
               <button 
-                onClick={() => {
-                  setIsUploadModalOpen(false);
-                  setSelectedFile(null);
-                  setError(null);
-                }} 
-                className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                onClick={() => setIsUploadModalOpen(false)} 
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
             
             <div className="space-y-4">
-              <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 shadow-[0_4px_12px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_4px_16px_rgba(0,0,0,0.3)] transition-all duration-200">
-                <input
-                  type="file"
-                  onChange={handleFileSelect}
-                  className="w-full text-gray-900 dark:text-white"
-                  accept=".pdf,.doc,.docx,.txt"
-                />
+              <div className="flex items-center justify-center w-full">
+                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-700 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500">
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <Upload className="w-8 h-8 mb-3 text-gray-500 dark:text-gray-400" />
+                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                      {selectedFile ? selectedFile.name : t.dashboard.uploadHint}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">PDF files only</p>
+                  </div>
+                  <input
+                    type="file"
+                    accept=".pdf,application/pdf"
+                    className="hidden"
+                    onChange={handleFileSelect}
+                  />
+                </label>
               </div>
               
               {selectedFile && (
