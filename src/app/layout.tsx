@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from '@/contexts/LanguageContext'
-import { ThemeProvider } from '@/contexts/ThemeContext'
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -37,11 +36,9 @@ export default function RootLayout({
         />
       </head>
       <body className={spaceGrotesk.className} suppressHydrationWarning>
-        <ThemeProvider>
-          <LanguageProvider>
-            {children}
-          </LanguageProvider>
-        </ThemeProvider>
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

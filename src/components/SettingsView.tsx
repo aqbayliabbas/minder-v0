@@ -68,8 +68,12 @@ const SettingsView = () => {
               English
             </button>
             <button
-              disabled
-              className="px-4 py-2 rounded-lg transition-colors bg-gray-100 text-gray-400 dark:bg-gray-600 dark:text-gray-500 cursor-not-allowed"
+              onClick={() => setLanguage('fr')}
+              className={`px-4 py-2 rounded-lg transition-colors ${
+                language === 'fr'
+                  ? 'bg-gray-900 text-white dark:bg-gray-700'
+                  : 'bg-gray-100 text-gray-900 dark:bg-gray-600 dark:text-gray-100'
+              }`}
             >
               Français
             </button>
