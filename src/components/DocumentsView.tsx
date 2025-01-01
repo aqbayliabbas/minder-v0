@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Search, FileText, Trash2, Loader2 } from 'lucide-react';
+import { Search, FileText, Trash2, Loader2, MoreVertical, MessageSquare } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
+import DocumentPreview from './DocumentPreview';
+import DocumentChat from './DocumentChat'; // Import DocumentChat component
 
 interface Document {
   id: string;
@@ -22,6 +24,13 @@ const DocumentsView = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [loadingFiles, setLoadingFiles] = useState<{ [key: string]: boolean }>({});
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  
   const { theme } = useTheme();
   const { t } = useLanguage();
   const supabase = createClientComponentClient();
@@ -102,49 +111,127 @@ const DocumentsView = () => {
     }
   };
 
-  const handlePreview = async (filePath: string, type: string) => {
+  const handlePreview = async (filePath: string, type: string, docId: string) => {
     try {
-      const { data } = await supabase
+      console.log('Starting preview for:', { filePath, type });
+      setError(null);
+      setLoadingFiles(prev => ({ ...prev, [docId]: true }));
+      setActiveDropdown(null);
+
+      if (!filePath) {
+        throw new Error('File path is missing');
+      }
+
+      console.log('Downloading file from Supabase...');
+      const { data, error } = await supabase
         .storage
         .from('documents')
-        .getPublicUrl(filePath);
+        .download(filePath);
 
-      // For PDFs and images, open in new tab
-      if (type.includes('pdf') || type.includes('image')) {
-        window.open(data.publicUrl, '_blank');
+      if (error) {
+        console.error('Supabase storage error:', error);
+        throw new Error(`Storage error: ${error.message}`);
+      }
+
+      if (!data) {
+        console.error('No data received from storage');
+        throw new Error('No data received from storage');
+      }
+
+      // Log file details
+      console.log('File downloaded successfully:', {
+        size: data.size,
+        type: data.type
+      });
+
+      if (type.includes('pdf')) {
+        const blob = new Blob([data], { type: 'application/pdf' });
+        const blobUrl = URL.createObjectURL(blob);
+        console.log('Created PDF blob URL:', blobUrl);
+        setPreviewUrl(blobUrl);
+        setSelectedDocument(documents.find(d => d.id === docId) || null);
+        setIsPreviewOpen(true);
+      } else if (type.includes('image')) {
+        const blob = new Blob([data], { type: 'image/*' });
+        const blobUrl = URL.createObjectURL(blob);
+        window.open(blobUrl, '_blank');
+        URL.revokeObjectURL(blobUrl);
       } else {
-        // For other files, download them
-        const response = await fetch(data.publicUrl);
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
+        const blob = new Blob([data]);
+        const blobUrl = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url;
+        a.href = blobUrl;
         a.download = filePath.split('/').pop() || 'download';
         document.body.appendChild(a);
         a.click();
-        window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
       }
     } catch (err) {
-      console.error('Error previewing document:', err);
-      setError(err instanceof Error ? err.message : 'Failed to preview document');
+      console.error('Preview error:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      console.error('Error details:', errorMessage);
+      setError(`Error accessing the file: ${errorMessage}`);
+      setPreviewUrl(null);
+    } finally {
+      setLoadingFiles(prev => ({ ...prev, [docId]: false }));
     }
   };
 
-  const handleChat = (id: string) => {
-    console.log('Chat button clicked with id:', id);
+  const handleChat = (document: Document) => {
+    setSelectedDocument(document);
+    setIsChatOpen(true);
+  };
+
+  // Add click outside handler to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (activeDropdown && !(event.target as Element).closest('.dropdown-menu')) {
+        setActiveDropdown(null);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [activeDropdown]);
+
+  const toggleDropdown = (docId: string) => {
+    setActiveDropdown(activeDropdown === docId ? null : docId);
   };
 
   return (
-    <div className="p-4">
-      <div className="mb-6">
+    <div className="p-2 sm:p-4 md:p-6">
+      <DocumentPreview 
+        document={selectedDocument}
+        url={previewUrl}
+        isOpen={isPreviewOpen}
+        onClose={() => {
+          if (previewUrl?.startsWith('blob:')) {
+            URL.revokeObjectURL(previewUrl);
+          }
+          setPreviewUrl(null);
+          setSelectedDocument(null);
+          setIsPreviewOpen(false);
+        }}
+      />
+      
+      <DocumentChat 
+        document={selectedDocument}
+        isOpen={isChatOpen}
+        onClose={() => {
+          setIsChatOpen(false);
+          setSelectedDocument(null);
+        }}
+      />
+
+      <div className="mb-4">
         <div className="relative">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <Search className="w-5 h-5 text-gray-500" />
+            <Search className="w-4 h-4 text-gray-500" />
           </div>
           <input
             type="text"
-            className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-black focus:border-black dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+            className="block w-full p-2 pl-9 text-xs sm:text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-black focus:border-black"
             placeholder={t.dashboard.searchDocuments}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -154,14 +241,14 @@ const DocumentsView = () => {
 
       {loading ? (
         <div className="flex items-center justify-center h-64">
-          <Loader2 className="w-8 h-8 animate-spin text-gray-500" />
+          <Loader2 className="w-6 sm:w-8 h-6 sm:h-8 animate-spin text-gray-500" />
         </div>
       ) : error ? (
-        <div className="text-center text-red-500 p-4">{error}</div>
+        <div className="text-center text-red-500 p-4 text-sm sm:text-base">{error}</div>
       ) : documents.length === 0 ? (
-        <div className="text-center text-gray-500 p-4">{t.dashboard.noDocumentsInitial}</div>
+        <div className="text-center text-gray-500 p-4 text-sm sm:text-base">{t.dashboard.noDocumentsInitial}</div>
       ) : (
-        <div className="grid gap-4">
+        <div className="flex flex-col gap-2 sm:gap-3">
           {documents
             .filter(doc =>
               doc.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -169,42 +256,98 @@ const DocumentsView = () => {
             .map(doc => (
               <div
                 key={doc.id}
-                className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700"
+                className="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 shadow-sm hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700"
               >
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-3 min-w-0 flex-1">
-                    <FileText className="w-5 h-5 flex-shrink-0 text-gray-400" />
-                    <div className="min-w-0">
-                      <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                <div className="flex items-center justify-between gap-3 sm:gap-4">
+                  <div className="flex items-start gap-2 sm:gap-3 min-w-0 flex-1">
+                    <FileText className="w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0 text-gray-400 mt-1" />
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white truncate">
                         {getFileName(doc.file_path)}
                       </h3>
-                      <div className="flex items-center gap-2 mt-1 text-xs text-gray-500 dark:text-gray-400">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mt-1 text-xs text-gray-500 dark:text-gray-400">
                         <span>{formatFileSize(doc.size)}</span>
-                        <span>•</span>
-                        <span>{formatDate(doc.created_at)}</span>
+                        <span className="hidden sm:inline">•</span>
+                        <span className="hidden sm:inline">{formatDate(doc.created_at)}</span>
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
+                  
+                  {/* Desktop Actions */}
+                  <div className="hidden sm:flex items-center gap-2">
                     <button
-                      onClick={() => handlePreview(doc.file_path, doc.type)}
-                      className="px-3 py-1.5 text-sm rounded-md bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                      onClick={() => handlePreview(doc.file_path, doc.type, doc.id)}
+                      className="inline-flex items-center gap-2 px-2.5 py-1.5 text-xs sm:text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
+                      disabled={loadingFiles[doc.id]}
                     >
-                      {t.dashboard.previewDocument}
+                      {loadingFiles[doc.id] ? (
+                        <Loader2 className="w-3.5 sm:w-4 h-3.5 sm:h-4 animate-spin" />
+                      ) : (
+                        <FileText className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
+                      )}
+                      <span className="hidden sm:inline">
+                        {loadingFiles[doc.id] ? 'Loading...' : t.dashboard.previewDocument}
+                      </span>
+                      <span className="sm:hidden">Preview</span>
                     </button>
                     <button
-                      onClick={() => handleChat(doc.id)}
-                      className="px-3 py-1.5 text-sm rounded-md bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-900/50 transition-colors"
+                      onClick={() => handleChat(doc)}
+                      className="inline-flex items-center gap-2 px-2.5 py-1.5 text-xs sm:text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
                     >
-                      Chat
+                      <MessageSquare className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
+                      <span>Chat</span>
                     </button>
                     <button
                       onClick={() => handleDelete(doc.id, doc.file_path)}
-                      className="p-1.5 text-gray-500 hover:text-red-600 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                      title="Delete document"
+                      className="inline-flex items-center gap-2 px-2.5 py-1.5 text-xs sm:text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
+                      <span>Delete</span>
                     </button>
+                  </div>
+
+                  {/* Mobile Actions */}
+                  <div className="relative sm:hidden">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleDropdown(doc.id);
+                      }}
+                      className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      aria-label="More options"
+                    >
+                      <MoreVertical className="w-4 h-4 text-gray-500" />
+                    </button>
+                    {activeDropdown === doc.id && (
+                      <div className="dropdown-menu absolute right-0 mt-1 w-40 sm:w-48 py-1 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 z-10">
+                        <button
+                          onClick={() => handlePreview(doc.file_path, doc.type, doc.id)}
+                          className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                          disabled={loadingFiles[doc.id]}
+                        >
+                          {loadingFiles[doc.id] ? (
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          ) : (
+                            <FileText className="w-3.5 h-3.5" />
+                          )}
+                          {loadingFiles[doc.id] ? 'Loading...' : 'Preview'}
+                        </button>
+                        <button
+                          onClick={() => handleChat(doc)}
+                          className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                        >
+                          <MessageSquare className="w-3.5 h-3.5" />
+                          Chat
+                        </button>
+                        <button
+                          onClick={() => handleDelete(doc.id, doc.file_path)}
+                          className="w-full px-3 sm:px-4 py-2 text-left text-xs sm:text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          Delete
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
