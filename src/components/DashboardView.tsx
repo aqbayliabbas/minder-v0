@@ -56,59 +56,54 @@ const DashboardView = () => {
   // Check authentication and fetch stats on component mount
   useEffect(() => {
     const checkAuthAndFetchStats = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          router.push('/auth/login');
+          return;
+        }
+
+        // Fetch document stats and recent activity in parallel
+        const [documentsResult, recentDocsResult] = await Promise.all([
+          supabase
+            .from('documents')
+            .select('*')
+            .eq('user_id', session.user.id),
+          supabase
+            .from('documents')
+            .select('*')
+            .eq('user_id', session.user.id)
+            .order('created_at', { ascending: false })
+            .limit(5)
+        ]);
+
+        if (documentsResult.error) {
+          console.error('Error fetching documents:', documentsResult.error);
+          return;
+        }
+
+        if (recentDocsResult.error) {
+          console.error('Error fetching recent activity:', recentDocsResult.error);
+          return;
+        }
+
+        // Calculate total storage used in bytes
+        const totalStorage = documentsResult.data?.reduce((acc, doc) => acc + (doc.size || 0), 0) || 0;
+        const storageInGB = totalStorage / (1024 * 1024 * 1024); // Convert bytes to GB
+
+        setStats({
+          totalDocuments: documentsResult.data?.length || 0,
+          storageUsed: storageInGB,
+          recentActivity: recentDocsResult.data || []
+        });
+      } catch (error) {
+        console.error('Error in checkAuthAndFetchStats:', error);
         router.push('/auth/login');
-        return;
       }
-
-      // Fetch document stats
-      const { data: documents, error: documentsError } = await supabase
-        .from('documents')
-        .select('*')
-        .eq('user_id', session.user.id);
-
-      if (documentsError) {
-        console.error('Error fetching documents:', documentsError);
-        return;
-      }
-
-      // Calculate total storage used in bytes
-      const totalStorage = documents?.reduce((acc, doc) => acc + (doc.size || 0), 0) || 0;
-      const storageInGB = totalStorage / (1024 * 1024 * 1024); // Convert bytes to GB
-
-      // Fetch recent activity (last 5 documents)
-      const { data: recentDocs, error: recentError } = await supabase
-        .from('documents')
-        .select('*')
-        .eq('user_id', session.user.id)
-        .order('created_at', { ascending: false })
-        .limit(5);
-
-      if (recentError) {
-        console.error('Error fetching recent activity:', recentError);
-      }
-
-      setStats({
-        totalDocuments: documents?.length || 0,
-        storageUsed: storageInGB,
-        recentActivity: recentDocs || []
-      });
     };
 
     checkAuthAndFetchStats();
   }, [router, supabase]);
-
-  // Check authentication on component mount
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        router.push('/auth/login');
-      }
-    };
-    checkAuth();
-  }, [router, supabase.auth]);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
