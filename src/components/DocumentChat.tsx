@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { X, FileText, Send, Loader2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -41,13 +41,7 @@ export default function DocumentChat({ document, onClose, isOpen }: DocumentChat
   const supabase = createClientComponentClient()
   const defaultLayoutPluginInstance = defaultLayoutPlugin()
 
-  useEffect(() => {
-    if (document && document.file_path) {
-      loadDocument()
-    }
-  }, [document])
-
-  const loadDocument = async () => {
+  const loadDocument = useCallback(async () => {
     if (!document?.file_path) return
 
     try {
@@ -64,7 +58,13 @@ export default function DocumentChat({ document, onClose, isOpen }: DocumentChat
     } catch (error) {
       console.error('Error loading document:', error)
     }
-  }
+  }, [document, supabase])
+
+  useEffect(() => {
+    if (document && document.file_path) {
+      loadDocument()
+    }
+  }, [document, loadDocument])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

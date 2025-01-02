@@ -1,7 +1,5 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { X, FileText } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 

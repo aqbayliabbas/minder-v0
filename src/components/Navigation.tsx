@@ -2,6 +2,7 @@
 
 import { useLanguage } from '@/contexts/LanguageContext'
 import Image from 'next/image'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
 
@@ -9,6 +10,12 @@ export default function Navigation() {
   const { language } = useLanguage()
   const { t } = useLanguage()
   const [isOpen, setIsOpen] = useState(false)
+  const [hasMounted, setHasMounted] = useState(false)
+
+  useEffect(() => {
+    // This will run after the component mounts
+    setHasMounted(true)
+  }, [])
 
   // Close mobile menu on window resize
   useEffect(() => {
@@ -25,8 +32,8 @@ export default function Navigation() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex-shrink-0">
-            <a href="/" className="flex items-center gap-2">
+          <div className="flex-shrink-0" suppressHydrationWarning>
+            <Link href="/" className="flex items-center gap-2">
               <Image
                 src="/assets/images/minder-logoo.png"
                 alt="Minder Logo"
@@ -38,11 +45,11 @@ export default function Navigation() {
               <span className="text-xl sm:text-2xl font-bold text-zinc-900">
                 Minder
               </span>
-            </a>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden" suppressHydrationWarning>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-zinc-700 hover:bg-zinc-50 transition-colors"
@@ -72,7 +79,7 @@ export default function Navigation() {
           </div>
 
           {/* Desktop navigation */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-4" suppressHydrationWarning>
             <div className="flex items-center gap-2">
               <motion.a
                 whileHover={{ scale: 1.02 }}

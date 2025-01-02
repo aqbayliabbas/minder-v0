@@ -1,9 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Bell, Moon, Globe, Lock, Mail, User } from 'lucide-react';
+import React from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
-import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface SettingsSectionProps {

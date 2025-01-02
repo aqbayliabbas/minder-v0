@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { 
   FileText, 
   Upload,
-  Activity,
   X
 } from 'lucide-react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
@@ -17,6 +16,16 @@ interface StatCardProps {
   value: string;
   title: string;
   subtext?: string;
+}
+
+interface ActivityItem {
+  id: string;
+  type: string;
+  documentName: string;
+  timestamp: string;
+  name: string;
+  created_at: string;
+  size: number;
 }
 
 const StatCard: React.FC<StatCardProps> = ({ icon, value, title, subtext }) => (
@@ -42,7 +51,7 @@ const DashboardView = () => {
   const [stats, setStats] = useState<{
     totalDocuments: number;
     storageUsed: number;
-    recentActivity: any[];
+    recentActivity: ActivityItem[];
   }>({
     totalDocuments: 0,
     storageUsed: 0,
@@ -221,7 +230,7 @@ const DashboardView = () => {
         <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">{t.dashboard.recentUploads}</h2>
         <div className="divide-y divide-gray-100 dark:divide-gray-700">
           {stats.recentActivity.length > 0 ? (
-            stats.recentActivity.map((doc: any) => (
+            stats.recentActivity.map((doc: ActivityItem) => (
               <div key={doc.id} className="py-3 flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <FileText className="w-5 h-5 text-gray-400" />
