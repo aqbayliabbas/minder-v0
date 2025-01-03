@@ -23,10 +23,9 @@ interface DocumentPreviewProps {
   document: Document | null
   onClose: () => void
   isOpen: boolean
-  url: string | null
 }
 
-export default function DocumentPreview({ document, onClose, isOpen, url }: DocumentPreviewProps) {
+export default function DocumentPreview({ document, onClose, isOpen }: DocumentPreviewProps) {
   const [signedUrl, setSignedUrl] = useState<string | null>(null)
   const defaultLayoutPluginInstance = defaultLayoutPlugin()
   const supabase = createClientComponentClient()
