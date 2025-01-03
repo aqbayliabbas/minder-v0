@@ -45,14 +45,14 @@ export default function DocumentChat({ document, onClose, isOpen }: DocumentChat
     if (!document?.file_path) return
 
     try {
-      const { data: { signedUrl }, error } = await supabase
+      const response = await supabase
         .storage
         .from('documents')
         .createSignedUrl(document.file_path, 60)
 
-      if (error) throw error
-      if (signedUrl) {
-        setPdfUrl(signedUrl)
+      if (response.error) throw response.error
+      if (response.data?.signedUrl) {
+        setPdfUrl(response.data.signedUrl)
       }
     } catch (error) {
       console.error('Error getting signed URL:', error)
