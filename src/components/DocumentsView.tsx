@@ -24,7 +24,6 @@ const DocumentsView = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [loadingFiles, setLoadingFiles] = useState<{ [key: string]: boolean }>({});
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
@@ -146,7 +145,6 @@ const DocumentsView = () => {
         const blob = new Blob([data], { type: 'application/pdf' });
         const blobUrl = URL.createObjectURL(blob);
         console.log('Created PDF blob URL:', blobUrl);
-        setPreviewUrl(blobUrl);
         setSelectedDocument(documents.find(d => d.id === docId) || null);
         setIsPreviewOpen(true);
       } else if (type.includes('image')) {
@@ -170,7 +168,6 @@ const DocumentsView = () => {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       console.error('Error details:', errorMessage);
       setError(`Error accessing the file: ${errorMessage}`);
-      setPreviewUrl(null);
     } finally {
       setLoadingFiles(prev => ({ ...prev, [docId]: false }));
     }
