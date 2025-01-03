@@ -5,8 +5,9 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import dynamic from 'next/dynamic'
 
-export default function Signup() {
+const SignupComponent = () => {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -154,3 +155,6 @@ export default function Signup() {
     </div>
   )
 }
+
+// Export the component with SSR disabled
+export default dynamic(() => Promise.resolve(SignupComponent), { ssr: false })

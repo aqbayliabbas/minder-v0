@@ -5,8 +5,9 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import dynamic from 'next/dynamic'
 
-export default function Login() {
+const LoginComponent = () => {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -139,3 +140,6 @@ export default function Login() {
     </div>
   )
 }
+
+// Export the component with SSR disabled
+export default dynamic(() => Promise.resolve(LoginComponent), { ssr: false })

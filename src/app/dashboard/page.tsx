@@ -3,14 +3,17 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
-import DashboardView from '../../components/DashboardView';
-import DocumentsView from '../../components/DocumentsView';
-import SettingsView from '../../components/SettingsView';
+import dynamic from 'next/dynamic';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LogOut } from 'lucide-react';
+
+// Dynamically import components with SSR disabled
+const DynamicDashboardView = dynamic(() => import('../../components/DashboardView'), { ssr: false });
+const DynamicDocumentsView = dynamic(() => import('../../components/DocumentsView'), { ssr: false });
+const DynamicSettingsView = dynamic(() => import('../../components/SettingsView'), { ssr: false });
 
 const DashboardContent = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -171,9 +174,9 @@ const DashboardContent = () => {
 
       {/* Main content */}
       <div className="p-4 md:ml-64 pt-20">
-        {activeTab === 'dashboard' && <DashboardView />}
-        {activeTab === 'documents' && <DocumentsView />}
-        {activeTab === 'settings' && <SettingsView />}
+        {activeTab === 'dashboard' && <DynamicDashboardView />}
+        {activeTab === 'documents' && <DynamicDocumentsView />}
+        {activeTab === 'settings' && <DynamicSettingsView />}
       </div>
     </div>
   );
@@ -187,4 +190,5 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+// Export the component with SSR disabled
+export default dynamic(() => Promise.resolve(DashboardPage), { ssr: false });

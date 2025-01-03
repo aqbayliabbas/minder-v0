@@ -5,34 +5,43 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 
-export default function Navigation() {
+// Create the Navigation component
+const Navigation = () => {
   const { language } = useLanguage()
   const { t } = useLanguage()
   const [isOpen, setIsOpen] = useState(false)
-  const [hasMounted, setHasMounted] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    // This will run after the component mounts
-    setHasMounted(true)
+    setMounted(true)
   }, [])
 
   // Close mobile menu on window resize
   useEffect(() => {
+    if (!mounted) return;
+
     const handleResize = () => {
       if (window.innerWidth >= 768 && isOpen) {
         setIsOpen(false)
       }
     }
+
+    handleResize() // Check initial size
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [isOpen])
+  }, [isOpen, mounted])
+
+  if (!mounted) {
+    return null; // Return nothing during SSR
+  }
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex-shrink-0" suppressHydrationWarning>
+          <div className="flex-shrink-0">
             <Link href="/" className="flex items-center gap-2">
               <Image
                 src="/assets/images/minder-logoo.png"
@@ -49,7 +58,7 @@ export default function Navigation() {
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden" suppressHydrationWarning>
+          <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-zinc-700 hover:bg-zinc-50 transition-colors"
@@ -79,7 +88,7 @@ export default function Navigation() {
           </div>
 
           {/* Desktop navigation */}
-          <div className="hidden md:flex items-center gap-4" suppressHydrationWarning>
+          <div className="hidden md:flex items-center gap-4">
             <div className="flex items-center gap-2">
               <motion.a
                 whileHover={{ scale: 1.02 }}
@@ -138,3 +147,6 @@ export default function Navigation() {
     </nav>
   )
 }
+
+// Export the component with SSR disabled
+export default dynamic(() => Promise.resolve(Navigation), { ssr: false })
