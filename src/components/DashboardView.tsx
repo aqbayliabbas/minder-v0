@@ -8,7 +8,6 @@ import {
 } from 'lucide-react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
-import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface StatCardProps {
@@ -59,7 +58,6 @@ const DashboardView = () => {
   });
   const supabase = createClientComponentClient();
   const router = useRouter();
-  const { theme } = useTheme();
   const { t } = useLanguage();
 
   // Check authentication and fetch stats on component mount

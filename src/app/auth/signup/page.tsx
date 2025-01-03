@@ -53,8 +53,8 @@ const SignupComponent = () => {
 
         router.push('/auth/login?message=Please check your email to verify your account')
       }
-    } catch (error: any) {
-      setError(error.message)
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'An error occurred during signup')
     } finally {
       setLoading(false)
     }

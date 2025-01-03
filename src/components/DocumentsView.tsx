@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Search, FileText, Trash2, Loader2, MoreVertical, MessageSquare } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
@@ -31,16 +30,11 @@ const DocumentsView = () => {
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   
-  const { theme } = useTheme();
   const { t } = useLanguage();
   const supabase = createClientComponentClient();
   const router = useRouter();
 
-  useEffect(() => {
-    fetchDocuments();
-  }, []);
-
-  const fetchDocuments = async () => {
+  const fetchDocuments = useCallback(async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
@@ -56,13 +50,17 @@ const DocumentsView = () => {
 
       if (error) throw error;
       setDocuments(data || []);
-    } catch (err) {
-      console.error('Error fetching documents:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch documents');
+    } catch (error) {
+      console.error('Error fetching documents:', error);
+      setError(error instanceof Error ? error.message : 'Failed to fetch documents');
     } finally {
       setLoading(false);
     }
-  };
+  }, [supabase, router]);
+
+  useEffect(() => {
+    fetchDocuments();
+  }, [fetchDocuments]);
 
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 Bytes';

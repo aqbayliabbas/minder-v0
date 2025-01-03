@@ -4,41 +4,7 @@ import React from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-interface SettingsSectionProps {
-  title: string;
-  children: React.ReactNode;
-}
-
-const SettingsSection: React.FC<SettingsSectionProps> = ({ title, children }) => (
-  <div className="border-b border-gray-200 dark:border-gray-700 pb-6 mb-6 last:border-0">
-    <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">{title}</h2>
-    <div className="space-y-4">
-      {children}
-    </div>
-  </div>
-);
-
-interface ToggleProps {
-  checked: boolean;
-  onChange: () => void;
-}
-
-const Toggle: React.FC<ToggleProps> = ({ checked, onChange }) => (
-  <button
-    onClick={onChange}
-    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-      checked ? 'bg-black dark:bg-white' : 'bg-gray-200 dark:bg-gray-700'
-    }`}
-  >
-    <span
-      className={`inline-block h-4 w-4 transform rounded-full transition-transform ${
-        checked ? 'translate-x-6 bg-white dark:bg-black' : 'translate-x-1 bg-white'
-      }`}
-    />
-  </button>
-);
-
-const SettingsView = () => {
+const SettingsView: React.FC = () => {
   const { t, language, setLanguage } = useLanguage();
   const { theme, toggleTheme } = useTheme();
 
@@ -56,6 +22,7 @@ const SettingsView = () => {
           </h2>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
             <button
+              type="button"
               onClick={() => setLanguage('en')}
               className={`px-4 py-2 rounded-lg transition-colors ${
                 language === 'en'
@@ -66,6 +33,7 @@ const SettingsView = () => {
               English
             </button>
             <button
+              type="button"
               onClick={() => setLanguage('fr')}
               className={`px-4 py-2 rounded-lg transition-colors ${
                 language === 'fr'
@@ -85,21 +53,23 @@ const SettingsView = () => {
           </h2>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
             <button
+              type="button"
               onClick={toggleTheme}
               className={`px-4 py-2 rounded-lg transition-colors ${
                 theme === 'light'
-                  ? 'bg-gray-900 text-white'
-                  : 'bg-gray-100 text-gray-900'
+                  ? 'bg-gray-900 text-white dark:bg-gray-700'
+                  : 'bg-gray-100 text-gray-900 dark:bg-gray-600 dark:text-gray-100'
               }`}
             >
               {t.navigation.theme.light || '🌞 Light'}
             </button>
             <button
+              type="button"
               onClick={toggleTheme}
               className={`px-4 py-2 rounded-lg transition-colors ${
                 theme === 'dark'
-                  ? 'bg-gray-900 text-white'
-                  : 'bg-gray-100 text-gray-900'
+                  ? 'bg-gray-900 text-white dark:bg-gray-700'
+                  : 'bg-gray-100 text-gray-900 dark:bg-gray-600 dark:text-gray-100'
               }`}
             >
               {t.navigation.theme.dark || '🌙 Dark'}

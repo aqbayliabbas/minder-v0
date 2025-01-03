@@ -48,8 +48,8 @@ const LoginComponent = () => {
       if (data?.session) {
         router.push('/dashboard')
       }
-    } catch (error: any) {
-      setError(error.message || 'An error occurred during login')
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'An error occurred during login')
     } finally {
       setLoading(false)
     }
@@ -131,7 +131,7 @@ const LoginComponent = () => {
           <div className="flex items-center justify-center">
             <div className="text-sm">
               <Link href="/auth/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
-                Don't have an account? Sign up
+                Don&apos;t have an account? Sign up
               </Link>
             </div>
           </div>

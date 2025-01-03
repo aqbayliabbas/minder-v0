@@ -8,9 +8,8 @@ import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 
 // Create the Navigation component
-const Navigation = () => {
+const Navigation: React.FC = () => {
   const { language } = useLanguage()
-  const { t } = useLanguage()
   const [isOpen, setIsOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
 
@@ -18,24 +17,18 @@ const Navigation = () => {
     setMounted(true)
   }, [])
 
-  // Close mobile menu on window resize
   useEffect(() => {
-    if (!mounted) return;
-
     const handleResize = () => {
-      if (window.innerWidth >= 768 && isOpen) {
+      if (window.innerWidth >= 768) {
         setIsOpen(false)
       }
     }
 
-    handleResize() // Check initial size
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [isOpen, mounted])
+  }, [])
 
-  if (!mounted) {
-    return null; // Return nothing during SSR
-  }
+  if (!mounted) return null
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100">

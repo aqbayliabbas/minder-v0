@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { HiOutlineHome, HiOutlineDocument, HiOutlineCog } from 'react-icons/hi';
+import { HiOutlineHome, HiOutlineDocument } from 'react-icons/hi';
 import { IoSettingsOutline } from 'react-icons/io5';
 
 interface SidebarProps {

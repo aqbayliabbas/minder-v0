@@ -1,15 +1,13 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { motion, useScroll, useInView } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useLanguage } from '@/contexts/LanguageContext'
-import { translations } from '@/translations'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-
-// Dynamically import Navigation with SSR disabled
-const Navigation = dynamic(() => import('@/components/Navigation'), { ssr: false })
+import Navigation from '@/components/Navigation'
+import { translations } from '@/translations'
 
 // Animation variants
 const fadeInUp = {
@@ -99,8 +97,9 @@ const HomePage = () => {
       setPhoneNumber('');
       setIsSuccessModalOpen(true); // Show success modal
       setTimeout(() => setIsSuccessModalOpen(false), 5000); // Hide after 5 seconds
-    } catch (error: any) {
-      if (error.code === '23505') {
+    } catch (error) {
+      console.error(error instanceof Error ? error.message : 'An error occurred')
+      if (error instanceof Error && error.message.includes('23505')) {
         setMessage({ type: 'error', content: 'This email is already registered for early access.' });
       } else {
         setMessage({ type: 'error', content: 'Something went wrong. Please try again.' });
@@ -124,8 +123,9 @@ const HomePage = () => {
 
       setNewsletterMessage({ type: 'success', content: 'Thank you for subscribing!' });
       setNewsletterEmail('');
-    } catch (error: any) {
-      if (error.code === '23505') {
+    } catch (error) {
+      console.error(error instanceof Error ? error.message : 'An error occurred')
+      if (error instanceof Error && error.message.includes('23505')) {
         setNewsletterMessage({ type: 'error', content: 'This email is already subscribed.' });
       } else {
         setNewsletterMessage({ type: 'error', content: 'Something went wrong. Please try again.' });
@@ -519,8 +519,8 @@ const HomePage = () => {
                   placeholder="Enter your email"
                   value={newsletterEmail}
                   onChange={(e) => setNewsletterEmail(e.target.value)}
-                  className="flex-1 px-4 py-3 rounded-lg bg-zinc-800/50 border border-zinc-700 text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
+                  className="flex-1 px-4 py-3 rounded-lg bg-zinc-800/50 border border-zinc-700 text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <button
                   type="submit"
@@ -699,10 +699,10 @@ const HomePage = () => {
               className="text-center"
             >
               <h2 className="text-2xl font-bold text-zinc-900 mb-4">
-                Welcome to Minder! 🎉
+                Welcome to Minder! 
               </h2>
               <p className="text-zinc-600 mb-6">
-                Thank you for joining our waitlist. We'll notify you as soon as we launch!
+                We&apos;ll notify you as soon as we launch!
               </p>
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
