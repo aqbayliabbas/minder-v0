@@ -45,18 +45,17 @@ export default function DocumentChat({ document, onClose, isOpen }: DocumentChat
     if (!document?.file_path) return
 
     try {
-      const { data, error } = await supabase
+      const { data: { signedUrl }, error } = await supabase
         .storage
         .from('documents')
-        .download(document.file_path)
+        .createSignedUrl(document.file_path, 60)
 
       if (error) throw error
-
-      const blob = new Blob([data], { type: 'application/pdf' })
-      const url = URL.createObjectURL(blob)
-      setPdfUrl(url)
+      if (signedUrl) {
+        setPdfUrl(signedUrl)
+      }
     } catch (error) {
-      console.error('Error loading document:', error)
+      console.error('Error getting signed URL:', error)
     }
   }, [document, supabase])
 
@@ -64,6 +63,15 @@ export default function DocumentChat({ document, onClose, isOpen }: DocumentChat
     if (document && document.file_path) {
       loadDocument()
     }
+
+    // Refresh the signed URL every 45 seconds
+    const interval = setInterval(() => {
+      if (document && document.file_path) {
+        loadDocument()
+      }
+    }, 45000)
+
+    return () => clearInterval(interval)
   }, [document, loadDocument])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -149,19 +157,23 @@ export default function DocumentChat({ document, onClose, isOpen }: DocumentChat
                 </h3>
               </div>
               <div className="flex-1 overflow-auto bg-gray-50">
-                {pdfUrl && document?.type.includes('pdf') ? (
-                  <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
-                    <Viewer 
-                      fileUrl={pdfUrl}
-                      plugins={[defaultLayoutPluginInstance]}
-                      defaultScale={1}
-                    />
-                  </Worker>
-                ) : (
-                  <div className="flex items-center justify-center h-full text-gray-500 text-sm">
-                    Preview not available
-                  </div>
-                )}
+                <div className="flex-1 bg-gray-50 overflow-hidden">
+                  {pdfUrl ? (
+                    <div style={{ height: '100%' }}>
+                      <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+                        <Viewer
+                          fileUrl={pdfUrl}
+                          plugins={[defaultLayoutPluginInstance]}
+                          defaultScale={1}
+                        />
+                      </Worker>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center h-full text-gray-500 text-sm">
+                      Loading preview...
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
