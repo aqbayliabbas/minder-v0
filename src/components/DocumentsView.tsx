@@ -201,13 +201,8 @@ const DocumentsView = () => {
     <div className="p-2 sm:p-4 md:p-6">
       <DocumentPreview 
         document={selectedDocument}
-        url={previewUrl}
         isOpen={isPreviewOpen}
         onClose={() => {
-          if (previewUrl?.startsWith('blob:')) {
-            URL.revokeObjectURL(previewUrl);
-          }
-          setPreviewUrl(null);
           setSelectedDocument(null);
           setIsPreviewOpen(false);
         }}
