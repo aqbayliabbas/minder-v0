@@ -153,27 +153,25 @@ export default function DocumentChat({ document, onClose, isOpen }: DocumentChat
               <div className="p-3 sm:p-4 border-b bg-gray-50">
                 <h3 className="font-medium text-gray-900 flex items-center gap-2 text-sm sm:text-base">
                   <FileText className="w-4 h-4" />
-                  Document Preview
+                  PDF Preview
                 </h3>
               </div>
               <div className="flex-1 overflow-auto bg-gray-50">
-                <div className="flex-1 bg-gray-50 overflow-hidden">
-                  {pdfUrl ? (
-                    <div style={{ height: '100%' }}>
-                      <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                        <Viewer
-                          fileUrl={pdfUrl}
-                          plugins={[defaultLayoutPluginInstance]}
-                          defaultScale={1}
-                        />
-                      </Worker>
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center h-full text-gray-500 text-sm">
-                      Loading preview...
-                    </div>
-                  )}
-                </div>
+                {pdfUrl ? (
+                  <div style={{ height: '100%' }}>
+                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+                      <Viewer
+                        fileUrl={pdfUrl}
+                        plugins={[defaultLayoutPluginInstance]}
+                        defaultScale={1}
+                      />
+                    </Worker>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center h-full text-gray-500 text-sm">
+                    Loading preview...
+                  </div>
+                )}
               </div>
             </div>
 

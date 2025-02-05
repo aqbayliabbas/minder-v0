@@ -9,6 +9,10 @@ import {
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
+import * as pdfjsLib from 'pdfjs-dist';
+
+// Set up PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
 interface StatCardProps {
   icon: React.ReactNode;
@@ -146,13 +150,15 @@ const DashboardView = () => {
 
       const fileName = `${session.user.id}/${Date.now()}-${selectedFile.name}`;
       
+      // Upload file to storage
       const { error: uploadError } = await supabase.storage
         .from('documents')
         .upload(fileName, selectedFile);
 
       if (uploadError) throw uploadError;
 
-      const { error: dbError } = await supabase
+      // Insert document record
+      const { data: documentData, error: dbError } = await supabase
         .from('documents')
         .insert({
           name: selectedFile.name,
@@ -160,11 +166,43 @@ const DashboardView = () => {
           size: selectedFile.size,
           type: selectedFile.type,
           user_id: session.user.id
-        });
+        })
+        .select()
+        .single();
 
       if (dbError) {
         await supabase.storage.from('documents').remove([fileName]);
         throw dbError;
+      }
+
+      // Extract PDF content
+      const fileBuffer = await selectedFile.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: fileBuffer }).promise;
+      
+      // Process all pages and combine the content
+      let fullContent = '';
+      for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        const page = await pdf.getPage(pageNum);
+        const textContent = await page.getTextContent();
+        const pageText = textContent.items
+          .map((item: any) => item.str)
+          .join(' ');
+        
+        // Add page number and content with proper spacing
+        fullContent += `[Page ${pageNum}]\n${pageText}\n\n`;
+      }
+
+      // Save all content in a single row
+      const { error: contentError } = await supabase
+        .from('content')
+        .insert({
+          document_id: documentData.id,
+          content: fullContent.trim(),
+          user_id: session.user.id
+        });
+
+      if (contentError) {
+        console.error('Error saving content:', contentError);
       }
 
       setIsUploadModalOpen(false);
