@@ -4,8 +4,8 @@ const nextConfig = {
     config.externals = [...config.externals, { canvas: "canvas" }];
     return config;
   },
-  // Add React strict mode
-  reactStrictMode: true,
+  // Temporarily disable React strict mode to resolve AbortError
+  reactStrictMode: false,
   onDemandEntries: {
     // Period (in ms) where the server will keep pages in the buffer
     maxInactiveAge: 25 * 1000,

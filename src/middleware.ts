@@ -10,14 +10,14 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  // If the user is not signed in and the current path is not /auth/*, redirect to /auth/login
-  if (!session && !req.nextUrl.pathname.startsWith('/')) {
+  // If user is not signed in and trying to access protected routes, redirect to login
+  if (!session && !req.nextUrl.pathname.startsWith('/auth') && req.nextUrl.pathname !== '/') {
     const redirectUrl = req.nextUrl.clone();
-    redirectUrl.pathname = '/';
+    redirectUrl.pathname = '/auth/login';
     return NextResponse.redirect(redirectUrl);
   }
 
-  // If the user is signed in and trying to access /auth/*, redirect to /dashboard
+  // If user is signed in and trying to access auth pages, redirect to dashboard
   if (session && req.nextUrl.pathname.startsWith('/auth')) {
     const redirectUrl = req.nextUrl.clone();
     redirectUrl.pathname = '/dashboard';
